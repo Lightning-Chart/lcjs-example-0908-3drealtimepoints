@@ -1,6 +1,6 @@
-# 3D Realtime Scatter Chart
+# JavaScript 3D Realtime Scatter Chart
 
-![3D Realtime Scatter Chart](3dRealtimePoints.png)
+![JavaScript 3D Realtime Scatter Chart](3dRealtimePoints.png)
 
 This demo application belongs to the set of examples for LightningChart JS, data visualization library for JavaScript.
 
