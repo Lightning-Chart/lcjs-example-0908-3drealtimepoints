@@ -13,7 +13,7 @@ const {
 
 // Initiate chart
 const chart3D = lightningChart().Chart3D({
-    // theme: Themes.dark
+    // theme: Themes.darkGold
 })
 
 // Set Axis titles
