@@ -5,11 +5,7 @@
 const lcjs = require('@arction/lcjs')
 
 // Extract required parts from LightningChartJS.
-const {
-    lightningChart,
-    PointSeriesTypes3D,
-    Themes
-} = lcjs
+const { lightningChart, PointSeriesTypes3D, Themes } = lcjs
 
 // Initiate chart
 const chart3D = lightningChart().Chart3D({
@@ -22,13 +18,10 @@ chart3D.getDefaultAxisY().setTitle('Axis Y')
 chart3D.getDefaultAxisZ().setTitle('Axis Z')
 
 // Set static Axis intervals.
-chart3D.getDefaultAxisX().setInterval( 0, 100, false, true )
-chart3D.getDefaultAxisY().setInterval( 0, 100, false, true )
-chart3D.getDefaultAxisZ().setInterval( 0, 100, false, true )
+chart3D.forEachAxis((axis) => axis.setInterval({ start: 0, end: 100 }))
 
 // Create Point Cloud Series (variant optimized for rendering minimal detail geometry)
-const pointSeries3D = chart3D.addPointSeries({ type: PointSeriesTypes3D.Pixelated })
-    .setPointStyle((style) => style.setSize(5))
+const pointSeries3D = chart3D.addPointSeries({ type: PointSeriesTypes3D.Pixelated }).setPointStyle((style) => style.setSize(5))
 
 // : Example data generation configuration :
 // Amount of data visible at a time.
@@ -44,10 +37,10 @@ chart3D.setTitle(`3D Realtime Point Series (${pointBatchSize} data points per fr
 // Generate data.
 new Promise((resolve, reject) => {
     const dataSets = []
-    for (let iDataset = 0; iDataset < uniqueDataSetsCount; iDataset ++) {
+    for (let iDataset = 0; iDataset < uniqueDataSetsCount; iDataset++) {
         const dataSet = []
         dataSets.push(dataSet)
-        for (let iPoint = 0; iPoint < pointBatchSize; iPoint ++) {
+        for (let iPoint = 0; iPoint < pointBatchSize; iPoint++) {
             const x = Math.random() * 100
             const y = Math.random() * 100
             const z = Math.random() * 100
@@ -55,27 +48,26 @@ new Promise((resolve, reject) => {
         }
     }
     resolve(dataSets)
+}).then((dataSets) => {
+    // Alternate visible dataset at regular intervals.
+    let iDataSet = 0
+    let lastSwitch
+    const switchDataSet = () => {
+        iDataSet = (iDataSet + 1) % uniqueDataSetsCount
+        const data = dataSets[iDataSet]
+        pointSeries3D
+            // Clear previous data.
+            .clear()
+            // Add new data.
+            .add(data)
+        lastSwitch = Date.now()
+    }
+    switchDataSet()
+    const checkRegularDataSetSwitch = () => {
+        if (Date.now() - lastSwitch >= frameDurationMs) {
+            switchDataSet()
+        }
+        requestAnimationFrame(checkRegularDataSetSwitch)
+    }
+    checkRegularDataSetSwitch()
 })
-    .then((dataSets) => {
-        // Alternate visible dataset at regular intervals.
-        let iDataSet = 0
-        let lastSwitch
-        const switchDataSet = () => {
-            iDataSet = (iDataSet + 1) % uniqueDataSetsCount
-            const data = dataSets[iDataSet]
-            pointSeries3D
-                // Clear previous data.
-                .clear()
-                // Add new data.
-                .add(data)
-            lastSwitch = Date.now()
-        }
-        switchDataSet()
-        const checkRegularDataSetSwitch = () => {
-            if (Date.now() - lastSwitch >= frameDurationMs) {
-                switchDataSet()
-            }
-            requestAnimationFrame(checkRegularDataSetSwitch)
-        }
-        checkRegularDataSetSwitch()
-    })
