@@ -9,7 +9,7 @@ const { lightningChart, PointSeriesTypes3D, Themes } = lcjs
 
 // Initiate chart
 const chart3D = lightningChart().Chart3D({
-    theme: Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined,
+    theme: Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined
 })
 
 // Set Axis titles
