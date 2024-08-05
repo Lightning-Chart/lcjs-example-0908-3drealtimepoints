@@ -2,7 +2,7 @@
  * LightningChartJS example that showcases PointSeries3D in a realtime application (continuous high speed data input)
  */
 // Import LightningChartJS
-const lcjs = require('@arction/lcjs')
+const lcjs = require('@lightningchart/lcjs')
 
 // Extract required parts from LightningChartJS.
 const { lightningChart, PointSeriesTypes3D, Themes } = lcjs
