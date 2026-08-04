@@ -67,7 +67,7 @@ new Promise((resolve, reject) => {
             // Clear previous data.
             .clear()
             // Add new data.
-            .add(data)
+            .appendJSON(data)
         lastSwitch = Date.now()
     }
     switchDataSet()
